@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouTubeChannelLibrary.API", "YouTubeChannelLibrary.API.csproj", "{82430EA2-A16A-3A69-018B-0E26F6AA8AA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82430EA2-A16A-3A69-018B-0E26F6AA8AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82430EA2-A16A-3A69-018B-0E26F6AA8AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82430EA2-A16A-3A69-018B-0E26F6AA8AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82430EA2-A16A-3A69-018B-0E26F6AA8AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {522AE04D-DD97-4962-8870-C239E4F3E58B}
+	EndGlobalSection
+EndGlobal
