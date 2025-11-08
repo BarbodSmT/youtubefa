@@ -19,7 +19,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ChannelService>();
 builder.Services.AddScoped<SubmissionService>();
-builder.Services.AddSingleton<IEmailService, MailjetEmailService>();
 builder.Services.AddHttpClient(); // Required for YouTubeUpdateService
 builder.Services.AddHostedService<YouTubeUpdateService>(); 
 

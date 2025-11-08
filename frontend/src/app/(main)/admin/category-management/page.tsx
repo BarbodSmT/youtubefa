@@ -40,15 +40,14 @@ import {
   Refresh,
   AdminPanelSettings,
   CheckCircle,
-  Cancel,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import type { Category } from '@/types';
 import { useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } from '@/store';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
-import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ApiError } from 'next/dist/server/api-utils';
 
 export default function AdminCategoryPage() {
   const theme = useTheme();
@@ -77,7 +76,7 @@ export default function AdminCategoryPage() {
     if (!token && user?.role !== "Admin") {
       router.push('/');
     }
-  }, [user, router]);
+  }, [user,token, router]);
   const filteredCategories = useMemo(() => {
     const categories = categoriesResponse || [];
     if (!searchQuery) return categories;
@@ -134,8 +133,7 @@ export default function AdminCategoryPage() {
       setSnackbar({ open: true, message: 'دسته‌بندی با موفقیت حذف شد!' });
       setSelectedCategories(prev => prev.filter(catId => catId !== id));
     } catch (err) {
-      const errorMessage = (err as any)?.data?.message || 'خطا در حذف دسته‌بندی';
-      setSnackbar({ open: true, message: errorMessage });
+      setSnackbar({ open: true, message: 'خطا در حذف دسته‌بندی' });
     }
   }, [deleteCategory]);
 

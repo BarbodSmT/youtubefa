@@ -15,17 +15,14 @@ public class AuthService
 {
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
-    private readonly IEmailService _emailService;
 
-    public AuthService(AppDbContext context, IConfiguration configuration, IEmailService emailService)
+    public AuthService(AppDbContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
-        _emailService = emailService;
     }
 
-    // --- Registration and Verification ---
-
+    // --- Registration (Email verification disabled) ---
     public async Task RegisterAsync(RegisterDto dto)
     {
         if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
@@ -38,59 +35,36 @@ public class AuthService
             Name = dto.Name,
             Email = dto.Email,
             PasswordHash = BCryptNet.HashPassword(dto.Password),
-            EmailConfirmed = true,
-            VerificationToken = null
+            EmailConfirmed = true,  // Auto-confirm since we don't have email
+            VerificationToken = null,
+            Role = "User"  // Default role
         };
 
         await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> VerifyEmailAsync(string token)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
-        if (user == null || user.EmailConfirmed)
-        {
-            return false;
-        }
-
-        user.EmailConfirmed = true;
-        user.VerificationToken = null; // Token should be single-use
-        await _context.SaveChangesAsync();
-        return true;
-    }
-
-    // --- Password Reset Flow ---
-
+    // --- Password Reset (Disabled without email) ---
     public async Task ForgotPasswordAsync(string email)
     {
+        // Without email service, we can't send reset links
+        // For now, admins will need to reset passwords manually
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         if (user == null)
         {
-            // Do not reveal that the user does not exist. Return silently.
+            // Don't reveal that user doesn't exist
             return;
         }
 
+        // Generate token but can't send it
         user.PasswordResetToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64))
                                         .Replace('+', '-')
                                         .Replace('/', '_');
-        user.ResetTokenExpires = DateTime.UtcNow.AddHours(1); // Token is valid for 1 hour
+        user.ResetTokenExpires = DateTime.UtcNow.AddHours(1);
         await _context.SaveChangesAsync();
 
-        // --- Email Sending Logic for Password Reset ---
-        var baseUrl = _configuration["FrontendSettings:BaseUrl"];
-        var path = _configuration["FrontendSettings:PasswordResetPath"];
-        // Use the correct route format for the frontend (e.g., /reset-password/TOKEN)
-        var resetLink = $"{baseUrl}/{path}/{user.PasswordResetToken}";
-
-        var emailSubject = "بازیابی رمز عبور";
-        var emailBody = $"<div dir='rtl' style='font-family: Arial, sans-serif; text-align: right;'>" +
-                        $"<h1>بازیابی رمز عبور</h1>" +
-                        $"<p>برای بازیابی رمز عبور خود لطفاً روی لینک زیر کلیک کنید:</p>" +
-                        $"<a href='{resetLink}' style='padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;'>بازیابی رمز عبور</a>" +
-                        $"</div>";
-
-        await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
+        // TODO: Log the reset token for admin to manually send
+        // Or display it in the response (not secure but works without email)
     }
 
     public async Task<bool> ResetPasswordAsync(ResetPasswordDto dto)
@@ -100,7 +74,6 @@ public class AuthService
 
         if (user == null)
         {
-            // Invalid or expired token
             return false;
         }
 
@@ -113,13 +86,18 @@ public class AuthService
     }
 
     // --- Login and Token Generation ---
-
     public async Task<(AuthResponseDto authResponse, string? refreshToken)> LoginAsync(LoginDto dto)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
         if (user == null || !BCryptNet.Verify(dto.Password, user.PasswordHash))
         {
             throw new Exception("ایمیل یا رمز عبور اشتباه است.");
+        }
+
+        // Check if email is confirmed (always true now)
+        if (!user.EmailConfirmed)
+        {
+            throw new Exception("لطفاً ابتدا ایمیل خود را تایید کنید.");
         }
 
         var accessToken = CreateJwtToken(user);
@@ -152,7 +130,7 @@ public class AuthService
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddMinutes(15), // Short-lived access token
+            expires: DateTime.Now.AddHours(24),  // Extended to 24 hours
             signingCredentials: creds
         );
 
