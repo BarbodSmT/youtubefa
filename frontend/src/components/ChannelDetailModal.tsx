@@ -108,7 +108,7 @@ export const ChannelDetailModal: React.FC<ChannelDetailModalProps> = ({ open, on
   });
 
   const modalStyle = {
-    position: 'absolute' as 'absolute',
+    position: 'absolute' as const,
     top: '53%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -121,7 +121,7 @@ export const ChannelDetailModal: React.FC<ChannelDetailModalProps> = ({ open, on
     border: '1px solid',
     borderColor: 'divider',
     overflow: 'hidden',
-    display: 'flex', 
+    display: 'flex',
     flexDirection: 'column',
   };
   

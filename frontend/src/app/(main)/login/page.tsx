@@ -22,9 +22,9 @@ import type { SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
-import type { RootState, AppDispatch } from '@/store';
+import type { RootState } from '@/store';
 import { useLoginMutation } from '@/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NextLink from 'next/link'
 
 const loginSchema = z.object({

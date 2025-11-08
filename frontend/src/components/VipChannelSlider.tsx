@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Typography, Avatar, Chip, IconButton, useTheme, alpha, Paper, Stack } from '@mui/material';
 import { Star, OpenInNew, PeopleAlt, Videocam, ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -93,7 +93,7 @@ const VipChannelSlider: React.FC = () => {
               width: '100%',
             }}
           >
-            {vipChannels.map((channel, index) => (
+            {vipChannels.map((channel) => (
               <SwiperSlide
                 key={channel.id}
                 style={{

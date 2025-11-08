@@ -39,7 +39,7 @@ export const optimizeImageUrl = (
   // For YouTube banners (yt3.googleusercontent.com)
   if (url.includes('yt3.googleusercontent.com') || url.includes('googleusercontent.com')) {
     // Remove size restrictions and add high quality parameters
-    let optimizedUrl = url.split('=')[0]; // Remove all parameters
+    const optimizedUrl = url.split('=')[0]; // Remove all parameters
     // Add high quality parameters
     return `${optimizedUrl}=w2120-fcrop64=1,00005000ffffa5a8-k-c0xffffffff-no-nd-rj`;
   }
@@ -76,12 +76,10 @@ export const generateResponsiveImages = (baseUrl: string) => {
  * Lazy load image with intersection observer
  * @param imgRef - Image element reference
  * @param src - Image source
- * @param placeholder - Placeholder image
  */
 export const lazyLoadImage = (
   imgRef: React.RefObject<HTMLImageElement>,
-  src: string,
-  placeholder: string = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PC9zdmc+'
+  src: string
 ) => {
   if (!imgRef.current) return;
 

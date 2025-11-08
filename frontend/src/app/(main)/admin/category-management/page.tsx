@@ -47,7 +47,6 @@ import { useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMuta
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { useRouter } from 'next/navigation';
-import { ApiError } from 'next/dist/server/api-utils';
 
 export default function AdminCategoryPage() {
   const theme = useTheme();
@@ -132,7 +131,7 @@ export default function AdminCategoryPage() {
       await deleteCategory(id).unwrap();
       setSnackbar({ open: true, message: 'دسته‌بندی با موفقیت حذف شد!' });
       setSelectedCategories(prev => prev.filter(catId => catId !== id));
-    } catch (err) {
+    } catch {
       setSnackbar({ open: true, message: 'خطا در حذف دسته‌بندی' });
     }
   }, [deleteCategory]);
@@ -143,7 +142,7 @@ export default function AdminCategoryPage() {
       await Promise.all(promises);
       setSnackbar({ open: true, message: `${selectedCategories.length} دسته‌بندی با موفقیت حذف شدند.` });
       setSelectedCategories([]);
-    } catch (err) {
+    } catch {
       setSnackbar({ open: true, message: 'یک یا چند مورد از حذف‌ها ناموفق بود.' });
     }
   }, [selectedCategories, deleteCategory]);
@@ -170,7 +169,7 @@ export default function AdminCategoryPage() {
       handleCloseDialog();
       refetch();
     } catch (err) {
-      const errorMessage = (err as any)?.data?.message || 'خطا در ذخیره تغییرات';
+      const errorMessage = (err as { data?: { message?: string } })?.data?.message || 'خطا در ذخیره تغییرات';
       setSnackbar({ open: true, message: errorMessage });
     }
   };
@@ -271,7 +270,7 @@ export default function AdminCategoryPage() {
 
       {isError && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          خطا در بارگذاری داده‌ها: {(error as any)?.data?.message || 'یک خطای ناشناخته رخ داد'}
+          خطا در بارگذاری داده‌ها: {(error as { data?: { message?: string } })?.data?.message || 'یک خطای ناشناخته رخ داد'}
         </Alert>
       )}
 
@@ -437,14 +436,13 @@ function CategoryForm({
   errors: { name?: string };
   isSubmitting: boolean;
 }) {
-  const [id, setId] = useState(category?.id || 0);
   const [name, setName] = useState(category?.name || '');
   const [icon, setIcon] = useState(category?.icon || '');
   const [color, setColor] = useState(category?.color || '');
-  var theme = useTheme();
+  const theme = useTheme();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ id, name, icon, color });
+    onSubmit({ id: category?.id || 0, name, icon, color });
   };
 
   return (

@@ -4,7 +4,6 @@ import {
   Box,
   Typography,
   Avatar,
-  CardMedia,
   useTheme,
   Button,
   Divider,
@@ -18,11 +17,10 @@ import {
   CardContent,
   Stack,
 } from '@mui/material';
-import { OpenInNew, VideoLibrary, BarChart, People, ArrowForward, YouTube } from '@mui/icons-material';
+import { VideoLibrary, BarChart, People, ArrowForward, YouTube } from '@mui/icons-material';
 import type { YouTubeVideo } from '@/types';
 import { useGetChannelByIdQuery } from '@/store';
 import { optimizeImageUrl } from '@/utils/imageOptimization';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { motion } from 'framer-motion';

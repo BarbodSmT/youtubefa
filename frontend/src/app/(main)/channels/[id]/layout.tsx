@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
         canonical: `https://youtubefarsi.com/channels/${params.id}`,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'کانال یوتیوب فارسی',
     };

@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const data = await response.json();
     const channels = data.channels || [];
 
-    const channelUrls = channels.map((channel: any) => ({
+    const channelUrls = channels.map((channel: { id: string }) => ({
       url: `${baseUrl}/channels/${channel.id}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
       ...channelUrls,
     ];
-  } catch (error) {
+  } catch {
     return [
       {
         url: baseUrl,
