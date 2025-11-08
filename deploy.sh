@@ -30,12 +30,6 @@ print_warning() {
     echo -e "${YELLOW}⚠${NC} $1"
 }
 
-# Check if running as root
-if [ "$EUID" -eq 0 ]; then 
-    print_error "Please don't run as root. Run as your regular user with sudo privileges."
-    exit 1
-fi
-
 # ========================================
 # STEP 1: Update System
 # ========================================
