@@ -49,10 +49,6 @@ export const apiSlice = createApi({
       }),
     }),
 
-    verifyEmail: builder.mutation<string, string>({
-      query: (token) => `/Auth/verify-email?token=${token}`,
-      transformResponse: (response: { message: string }) => response.message,
-    }),
     forgotPassword: builder.mutation<string, { email: string }>({
       query: ({ email }) => ({
         url: '/Auth/forgot-password',
@@ -146,6 +142,21 @@ export const apiSlice = createApi({
         }
       },
     }),
+    getVipChannels: builder.query<YouTubeChannel[], void>({
+      query: () => '/Channels/vip',
+      providesTags: ['Channel'],
+      transformResponse: (response: { data: any }) => {
+        return response.data?.$values || response.data || [];
+      },
+    }),
+    toggleVipStatus: builder.mutation<YouTubeChannel, string>({
+      query: (id) => ({
+        url: `/Channels/${id}/vip`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['Channel'],
+      transformResponse: (response: { data: YouTubeChannel }) => response.data,
+    }),
     getPendingSubmissions: builder.query<Submission[], void>({
         query: () => '/Submissions/pending',
         providesTags: ['Submission'],
@@ -206,32 +217,33 @@ export const apiSlice = createApi({
   }),
 });
 
-// Export hooks for usage in functional components
-export const {
-  //Auth queries and mutations
-  useLoginMutation,
-  useRegisterMutation,
-  useVerifyEmailMutation,
-  useForgotPasswordMutation,
-  useResetPasswordMutation,
-  useRefreshTokenMutation,
-  useFetchUserByTokenQuery,
-  // Channel queries and mutations
-  useGetChannelsQuery,
-  useGetChannelByIdQuery,
-  useUpdateChannelMutation,
-  useDeleteChannelMutation,
-  
-  // Submissions
-  useGetPendingSubmissionsQuery,
-  useAddSubmissionMutation,
-  useApproveSubmissionMutation,
-  useRejectSubmissionMutation,
-  
-  // Categories
-  useGetCategoriesQuery,
-  useCreateCategoryMutation,
-  useUpdateCategoryMutation,
-  useDeleteCategoryMutation
-} = apiSlice;
+ // Export hooks for usage in functional components
+ export const {
+   //Auth queries and mutations
+   useLoginMutation,
+   useRegisterMutation,
+   useForgotPasswordMutation,
+   useResetPasswordMutation,
+   useRefreshTokenMutation,
+   useFetchUserByTokenQuery,
+   // Channel queries and mutations
+   useGetChannelsQuery,
+   useGetChannelByIdQuery,
+   useUpdateChannelMutation,
+   useDeleteChannelMutation,
+   useGetVipChannelsQuery,
+   useToggleVipStatusMutation,
+
+   // Submissions
+   useGetPendingSubmissionsQuery,
+   useAddSubmissionMutation,
+   useApproveSubmissionMutation,
+   useRejectSubmissionMutation,
+
+   // Categories
+   useGetCategoriesQuery,
+   useCreateCategoryMutation,
+   useUpdateCategoryMutation,
+   useDeleteCategoryMutation
+ } = apiSlice;
 

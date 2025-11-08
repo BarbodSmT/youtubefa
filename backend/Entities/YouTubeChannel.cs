@@ -18,6 +18,7 @@ public class YouTubeChannel
     public long ViewCount { get; set; }
     public List<string>? Tags { get; set; }
     public DateTime LastUpdatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsVip { get; set; } = false;
 
     public int CategoryId { get; set; }
     [ForeignKey("CategoryId")]

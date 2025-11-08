@@ -45,6 +45,8 @@ import {
   Link as LinkIcon,
   OpenInNew,
   CheckCircle,
+  Star,
+  StarBorder,
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import type { YouTubeChannel, UpdateChannelDto} from '@/types'
@@ -53,6 +55,7 @@ import {
   useUpdateChannelMutation,
   useDeleteChannelMutation,
   useGetCategoriesQuery,
+  useToggleVipStatusMutation,
 } from "@/store";
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
@@ -78,6 +81,7 @@ export default function AdminChannelsPage() {
 
   const [updateChannel, { isLoading: isUpdating }] = useUpdateChannelMutation();
   const [deleteChannel, { isLoading: isDeleting }] = useDeleteChannelMutation();
+  const [toggleVipStatus] = useToggleVipStatusMutation();
 
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -182,6 +186,20 @@ export default function AdminChannelsPage() {
       });
     }
   }, [selectedChannels, deleteChannel]);
+
+  const handleToggleVip = useCallback(
+    async (id: string) => {
+      try {
+        await toggleVipStatus(id).unwrap();
+        setSnackbar({ open: true, message: "وضعیت VIP کانال با موفقیت تغییر یافت!" });
+        refetchChannels();
+      } catch (err) {
+        const errorMessage = (err as any)?.data?.message || "خطا در تغییر وضعیت VIP";
+        setSnackbar({ open: true, message: errorMessage });
+      }
+    },
+    [toggleVipStatus, refetchChannels]
+  );
 
   const handleSubmit = async () => {
     if (!currentChannel) return;
@@ -449,6 +467,14 @@ export default function AdminChannelsPage() {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
+                      <Tooltip title={channel.isVip ? "حذف از VIP" : "افزودن به VIP"}>
+                        <IconButton
+                          color={channel.isVip ? "warning" : "default"}
+                          onClick={() => handleToggleVip(channel.id)}
+                        >
+                          {channel.isVip ? <Star /> : <StarBorder />}
+                        </IconButton>
+                      </Tooltip>
                       <Tooltip title="ویرایش">
                         <IconButton
                           color="primary"

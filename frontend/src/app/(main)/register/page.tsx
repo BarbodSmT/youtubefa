@@ -113,7 +113,7 @@ export default function RegisterPage() {
           >
             {isSuccess ? (
                 <Alert severity="success" sx={{ backgroundColor: theme.palette.background.default,color: theme.palette.text.primary,my: 2, width: '100%' }}>
-                    ثبت نام شما با موفقیت انجام شد. لطفا ایمیل خود را برای فعال‌سازی حساب کاربری بررسی کنید.
+                    ثبت نام شما با موفقیت انجام شد. الان می توانید به حساب خود وارد شوید.
                 </Alert>
             ) : (
               <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>

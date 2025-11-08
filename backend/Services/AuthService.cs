@@ -30,7 +30,6 @@ public class AuthService
     {
         if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
         {
-            // Use a specific, clear error message.
             throw new Exception("کاربری با این ایمیل قبلاً ثبت‌نام کرده است.");
         }
 
@@ -39,28 +38,12 @@ public class AuthService
             Name = dto.Name,
             Email = dto.Email,
             PasswordHash = BCryptNet.HashPassword(dto.Password),
-            // Generate a URL-safe token
-            VerificationToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64))
-                                    .Replace('+', '-')
-                                    .Replace('/', '_')
+            EmailConfirmed = true,
+            VerificationToken = null
         };
 
         await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
-
-        // --- Email Sending Logic is now inside the service ---
-        var baseUrl = _configuration["FrontendSettings:BaseUrl"];
-        var path = _configuration["FrontendSettings:EmailVerificationPath"];
-        var verificationLink = $"{baseUrl}/{path}?token={user.VerificationToken}";
-
-        var emailSubject = "تایید حساب کاربری";
-        var emailBody = $"<div dir='rtl' style='font-family: Arial, sans-serif; text-align: right;'>" +
-                        $"<h1>حساب کاربری خود را تایید کنید</h1>" +
-                        $"<p>برای تایید حساب کاربری خود لطفاً روی لینک زیر کلیک کنید:</p>" +
-                        $"<a href='{verificationLink}' style='padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;'>تایید ایمیل</a>" +
-                        $"</div>";
-
-        await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
     }
 
     public async Task<bool> VerifyEmailAsync(string token)
@@ -137,10 +120,6 @@ public class AuthService
         if (user == null || !BCryptNet.Verify(dto.Password, user.PasswordHash))
         {
             throw new Exception("ایمیل یا رمز عبور اشتباه است.");
-        }
-        if (!user.EmailConfirmed)
-        {
-            throw new Exception("حساب کاربری شما فعال نشده است. لطفاً ایمیل خود را برای لینک فعال‌سازی بررسی کنید.");
         }
 
         var accessToken = CreateJwtToken(user);

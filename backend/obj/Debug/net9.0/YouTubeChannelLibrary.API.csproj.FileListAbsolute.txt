@@ -362,3 +362,4 @@ D:\youtubefa\backend\obj\Debug\net9.0\refint\YouTubeChannelLibrary.API.dll
 D:\youtubefa\backend\obj\Debug\net9.0\YouTubeChannelLibrary.API.pdb
 D:\youtubefa\backend\obj\Debug\net9.0\YouTubeChannelLibrary.API.genruntimeconfig.cache
 D:\youtubefa\backend\obj\Debug\net9.0\ref\YouTubeChannelLibrary.API.dll
+D:\youtubefa\backend\obj\Debug\net9.0\YouTubeChannelLibrary.API.sourcelink.json

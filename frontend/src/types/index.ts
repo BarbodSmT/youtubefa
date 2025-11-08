@@ -28,11 +28,12 @@ export interface YouTubeChannel {
   subscriberCount: number;
   videoCount: number;
   viewCount: number;
-  tags?: string[]; 
+  tags?: string[];
   categoryId: number;
   category?: Category;
   recentVideos?: YouTubeVideo[];
   lastUpdatedAt: string;
+  isVip: boolean;
 }
 
 export interface Submission {

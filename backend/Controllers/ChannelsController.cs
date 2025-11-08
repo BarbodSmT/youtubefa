@@ -78,4 +78,35 @@ public class ChannelsController : ControllerBase
         }
         return Ok(ApiResponse<object>.Success("کانال با موفقیت حذف شد."));
     }
+
+    [HttpPatch("{id}/vip")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ApiResponse<YouTubeChannel>>> ToggleVipStatus(string id)
+    {
+        var channel = await _context.Channels
+            .Include(c => c.Category)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (channel == null)
+        {
+            return NotFound(ApiResponse<YouTubeChannel>.Fail("کانال مورد نظر یافت نشد.", 404));
+        }
+
+        channel.IsVip = !channel.IsVip;
+        await _context.SaveChangesAsync();
+
+        return Ok(ApiResponse<YouTubeChannel>.Success(channel, $"وضعیت VIP کانال به {(channel.IsVip ? "فعال" : "غیرفعال")} تغییر یافت."));
+    }
+
+    [HttpGet("vip")]
+    public async Task<ActionResult<ApiResponse<List<YouTubeChannel>>>> GetVipChannels()
+    {
+        var vipChannels = await _context.Channels
+            .Include(c => c.Category)
+            .Where(c => c.IsVip)
+            .OrderByDescending(c => c.SubscriberCount)
+            .ToListAsync();
+
+        return Ok(ApiResponse<List<YouTubeChannel>>.Success(vipChannels));
+    }
 }
