@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Box, List, ListItem, ListItemIcon, ListItemText, Toolbar, Divider, Typography, Button, Drawer } from '@mui/material';
+import { Box, List, ListItem, ListItemIcon, ListItemText, Divider, Typography, Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../store';
@@ -10,7 +10,7 @@ import { Home as HomeIcon, AdminPanelSettings, Login, AppRegistration, PostAdd }
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { user, token } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());

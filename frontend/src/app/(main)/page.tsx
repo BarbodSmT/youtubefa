@@ -55,7 +55,7 @@ function HomePage() {
     if (isError) {
       return (
         <Alert severity="error">
-          خطا در بارگذاری کانال‌ها: {(error as any)?.data?.message || 'خطای سرور'}
+          خطا در بارگذاری کانال‌ها: {(error as { data?: { message?: string } })?.data?.message || 'خطای سرور'}
         </Alert>
       );
     }

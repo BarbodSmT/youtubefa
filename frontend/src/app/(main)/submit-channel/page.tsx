@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import {
   Container,
@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { YouTube, Link as LinkIcon } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import type {RootState, AppDispatch } from '../../../store';
+import type {RootState } from '../../../store';
 import { useGetCategoriesQuery, useAddSubmissionMutation } from '../../../store';
 
 const normalizeYouTubeUrl = (input: string): string => {
@@ -33,21 +33,22 @@ const normalizeYouTubeUrl = (input: string): string => {
 
 export default function SubmitChannelPage() {
   const theme = useTheme();
-  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const [createSubmission, { 
-    isLoading: loading, 
-    isSuccess: submissionSuccess,
-    error: error 
-  }] = useAddSubmissionMutation();
-  const { 
-    data: categories, 
-    isLoading: categoriesLoading, 
-    isError: categoriesError 
-  } = useGetCategoriesQuery();
-  const [formError, setFormError] = useState<string | null>(null);
   const { user, token } = useSelector((state: RootState) => state.auth);
-  if (!token && !user) { 
+  const [channelUrl, setChannelUrl] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
+  const [createSubmission, {
+    isLoading: loading,
+    isSuccess: submissionSuccess,
+    error: error
+  }] = useAddSubmissionMutation();
+  const {
+    data: categories,
+    isLoading: categoriesLoading
+  } = useGetCategoriesQuery();
+
+  if (!token && !user) {
     return (
     <Container component="main" maxWidth="md" sx={{ mt: 8, pb: 4 }}>
       <Grid container justifyContent="center">
@@ -58,8 +59,6 @@ export default function SubmitChannelPage() {
     </Grid></Grid></Container>
     )
   }
-  const [channelUrl, setChannelUrl] = useState('');
-  const [categoryId, setCategoryId] = useState('');
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

@@ -76,7 +76,7 @@ export default function AdminChannelsPage() {
     if (!token && user?.role !== "Admin") {
       router.push('/');
     }
-  }, [user, router]);
+  }, [user, token, router]);
   const { data: categoriesResponse } = useGetCategoriesQuery();
 
   const [updateChannel, { isLoading: isUpdating }] = useUpdateChannelMutation();
@@ -163,7 +163,7 @@ export default function AdminChannelsPage() {
         setSnackbar({ open: true, message: "کانال با موفقیت حذف شد!" });
         setSelectedChannels((prev) => prev.filter((chId) => chId !== id));
       } catch (err) {
-        const errorMessage = (err as any)?.data?.message || "خطا در حذف کانال";
+        const errorMessage = (err as { data?: { message?: string } })?.data?.message || "خطا در حذف کانال";
         setSnackbar({ open: true, message: errorMessage });
       }
     },
@@ -179,7 +179,7 @@ export default function AdminChannelsPage() {
         message: `${selectedChannels.length} کانال با موفقیت حذف شدند.`,
       });
       setSelectedChannels([]);
-    } catch (err) {
+    } catch {
       setSnackbar({
         open: true,
         message: "یک یا چند مورد از حذف‌ها ناموفق بود.",
@@ -194,7 +194,7 @@ export default function AdminChannelsPage() {
         setSnackbar({ open: true, message: "وضعیت VIP کانال با موفقیت تغییر یافت!" });
         refetchChannels();
       } catch (err) {
-        const errorMessage = (err as any)?.data?.message || "خطا در تغییر وضعیت VIP";
+        const errorMessage = (err as { data?: { message?: string } })?.data?.message || "خطا در تغییر وضعیت VIP";
         setSnackbar({ open: true, message: errorMessage });
       }
     },
@@ -232,7 +232,7 @@ export default function AdminChannelsPage() {
       refetchChannels();
     } catch (err) {
       const errorMessage =
-        (err as any)?.data?.message || "خطا در ذخیره تغییرات";
+        (err as { data?: { message?: string } })?.data?.message || "خطا در ذخیره تغییرات";
       setSnackbar({ open: true, message: errorMessage });
     }
   };
@@ -351,7 +351,7 @@ export default function AdminChannelsPage() {
       {isError && (
         <Alert severity="error" sx={{ mb: 3 }}>
           خطا در بارگذاری داده‌ها:{" "}
-          {(error as any)?.data?.message || "یک خطای ناشناخته رخ داد"}
+          {(error as { data?: { message?: string } })?.data?.message || "یک خطای ناشناخته رخ داد"}
         </Alert>
       )}
 

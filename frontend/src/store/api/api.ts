@@ -1,10 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { RootState, AppDispatch } from '../index';
-import type { YouTubeChannel, Submission, Category, CategoryDto, UpdateChannelDto, User, AuthResponseDto, RegisterDto, LoginDto, ResetPasswordDto } from '../../types';
+import type { RootState } from '../index';
+import type { YouTubeChannel, Submission, Category, UpdateChannelDto, User, AuthResponseDto, RegisterDto, LoginDto, ResetPasswordDto } from '../../types';
 import { setCredentials } from '../index';
 
-const unwrapResult = (response: any) => {
-    return response.data?.$values || response.data;
+const unwrapResult = <T>(response: { data?: { $values?: T } | T }): T => {
+    const data = response.data;
+    if (data && typeof data === 'object' && '$values' in data) {
+        return (data.$values || []) as T;
+    }
+    return (data || []) as T;
 };
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -84,9 +88,10 @@ export const apiSlice = createApi({
         result && result.channels
           ? [...result.channels.map(({ id }) => ({ type: 'Channel' as const, id })), 'Channel']
           : ['Channel'],
-      transformResponse: (response: { data: { channels: any, lastUpdated: string } }) => {
-        const channels = response.data.channels?.$values || response.data.channels || [];
-        return { channels, lastUpdated: response.data.lastUpdated };
+      transformResponse: (response: { data: { channels: { $values?: YouTubeChannel[] } | YouTubeChannel[], lastUpdated: string } }) => {
+        const channelsData = response.data.channels;
+        const channels = (channelsData && typeof channelsData === 'object' && '$values' in channelsData) ? channelsData.$values : channelsData || [];
+        return { channels: channels as YouTubeChannel[], lastUpdated: response.data.lastUpdated };
       }
     }),
     getChannelById: builder.query<YouTubeChannel, string>({
@@ -145,8 +150,12 @@ export const apiSlice = createApi({
     getVipChannels: builder.query<YouTubeChannel[], void>({
       query: () => '/Channels/vip',
       providesTags: ['Channel'],
-      transformResponse: (response: { data: any }) => {
-        return response.data?.$values || response.data || [];
+      transformResponse: (response: { data: { $values?: YouTubeChannel[] } | YouTubeChannel[] }): YouTubeChannel[] => {
+        const data = response.data;
+        if (data && typeof data === 'object' && '$values' in data) {
+          return data.$values || [];
+        }
+        return (Array.isArray(data) ? data : []);
       },
     }),
     toggleVipStatus: builder.mutation<YouTubeChannel, string>({

@@ -43,7 +43,6 @@ import {
   useRejectSubmissionMutation,
   useGetCategoriesQuery,
 } from '@/store';
-import type { Submission } from '@/types';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { useRouter } from 'next/navigation';
@@ -68,7 +67,7 @@ export default function AdminApprovalPage() {
     if (!token && user?.role !== "Admin") {
       router.push('/');
     }
-  }, [user, router]);
+  }, [user, token, router]);
   const [selectedSubmissions, setSelectedSubmissions] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
@@ -101,7 +100,7 @@ export default function AdminApprovalPage() {
       setSelectedSubmissions(prev => prev.filter(id => id !== submissionId));
       refetch();
     } catch (err) {
-      setSnackbar({ open: true, message: (err as any)?.data?.message || 'خطا در تایید درخواست.' });
+      setSnackbar({ open: true, message: (err as { data?: { message?: string } })?.data?.message || 'خطا در تایید درخواست.' });
     }
   }, [approveSubmission, refetch]);
 
@@ -112,7 +111,7 @@ export default function AdminApprovalPage() {
       setSelectedSubmissions(prev => prev.filter(id => id !== submissionId));
       refetch();
     } catch (err) {
-      setSnackbar({ open: true, message: (err as any)?.data?.message || 'خطا در رد درخواست.' });
+      setSnackbar({ open: true, message: (err as { data?: { message?: string } })?.data?.message || 'خطا در رد درخواست.' });
     }
   }, [rejectSubmission, refetch]);
 
@@ -140,7 +139,7 @@ export default function AdminApprovalPage() {
       setSelectedSubmissions([]);
       refetch();
     } catch (err) {
-      setSnackbar({ open: true, message: (err as any)?.data?.message || 'یک یا چند مورد از تاییدها ناموفق بود.' });
+      setSnackbar({ open: true, message: (err as { data?: { message?: string } })?.data?.message || 'یک یا چند مورد از تاییدها ناموفق بود.' });
     }
   }, [selectedSubmissions, approveSubmission, refetch]);
 
@@ -152,7 +151,7 @@ export default function AdminApprovalPage() {
       setSelectedSubmissions([]);
       refetch();
     } catch (err) {
-      setSnackbar({ open: true, message: (err as any)?.data?.message || 'یک یا چند مورد از رد کردن‌ها ناموفق بود.' });
+      setSnackbar({ open: true, message: (err as { data?: { message?: string } })?.data?.message || 'یک یا چند مورد از رد کردن‌ها ناموفق بود.' });
     }
   }, [selectedSubmissions, rejectSubmission, refetch]);
 
@@ -259,7 +258,7 @@ export default function AdminApprovalPage() {
 
       {isError && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          خطا در بارگذاری داده‌ها: {(error as any)?.data?.message || 'یک خطای ناشناخته رخ داد'}
+          خطا در بارگذاری داده‌ها: {(error as { data?: { message?: string } })?.data?.message || 'یک خطای ناشناخته رخ داد'}
         </Alert>
       )}
 
