@@ -62,7 +62,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        var allowedOrigins = builder.Configuration
+            .GetSection("CorsSettings:AllowedOrigins")
+            .Get<string[]>() ?? new[] { "http://localhost:3000" };
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

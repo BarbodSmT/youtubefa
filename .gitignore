@@ -14,6 +14,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+/backend/appsettings.Production.json
 /backend/.env
 /frontend/.env
 /frontend/.env.local
