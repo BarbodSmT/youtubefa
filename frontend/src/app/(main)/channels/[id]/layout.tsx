@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       openGraph: {
         title: `${channel.title} | کانال یوتیوب فارسی`,
         description: metaDescription,
-        url: `https://youtubefarsi.com/channels/${id}`,
+        url: `https://utubefa.com/channels/${id}`,
         siteName: 'یوتیوب فارسی',
         locale: 'fa_IR',
         type: 'profile',
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         images: [channel.avatar || '/default-avatar.png'],
       },
       alternates: {
-        canonical: `https://youtubefarsi.com/channels/${id}`,
+        canonical: `https://utubefa.com/channels/${id}`,
       },
       robots: {
         index: true,
