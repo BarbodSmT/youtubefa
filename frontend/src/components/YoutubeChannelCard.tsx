@@ -79,7 +79,8 @@ const YoutubeChannelCard: React.FC<YouTubeChannelCardProps> = ({ youtubeChannel,
             <Box
               component="img"
               src={optimizeImageUrl(youtubeChannel.bannerImage)}
-              alt={`${youtubeChannel.title} بنر`}
+              alt={`تصویر بنر کانال ${youtubeChannel.title}`}
+              title={`بنر ${youtubeChannel.title}`}
               loading="lazy"
               referrerPolicy="no-referrer"
               sx={{
@@ -93,11 +94,12 @@ const YoutubeChannelCard: React.FC<YouTubeChannelCardProps> = ({ youtubeChannel,
           {youtubeChannel.avatar && youtubeChannel.avatar.trim() !== '' && (
             <Avatar
               src={optimizeImageUrl(youtubeChannel.avatar)}
-              alt={youtubeChannel.title}
+              alt={`تصویر پروفایل کانال ${youtubeChannel.title}`}
               slotProps={{
                 img: {
                   referrerPolicy: 'no-referrer',
-                  loading: 'lazy'
+                  loading: 'lazy',
+                  title: `آواتار ${youtubeChannel.title}`
                 },
               }}
               sx={{

@@ -5,7 +5,7 @@ import { ThemeProvider } from '../theme/ThemeProvider';
 import AuthInitializer from '@/components/AuthInitializer';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://utubefa.com'),
+  metadataBase: new URL('https://youtubefarsi.com'),
   title: {
     default: 'یوتیوب فارسی | کتابخانه کانال‌های یوتیوب فارسی',
     template: '%s | یوتیوب فارسی',
@@ -22,9 +22,12 @@ export const metadata: Metadata = {
     'محتوای فارسی',
     'یوتیوبر',
     'کتابخانه یوتیوب',
+    'لیست کانال های یوتیوب فارسی',
+    'بهترین کانال های یوتیوب فارسی',
   ],
-  creator: 'YoutubeFa',
-  publisher: 'YoutubeFa',
+  authors: [{ name: 'یوتیوب فارسی' }],
+  creator: 'یوتیوب فارسی',
+  publisher: 'یوتیوب فارسی',
   robots: {
     index: true,
     follow: true,
@@ -39,11 +42,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'fa_IR',
-    url: 'https://utubefa.com',
+    url: 'https://youtubefarsi.com',
     siteName: 'یوتیوب فارسی',
     title: 'یوتیوب فارسی | کتابخانه کانال‌های یوتیوب فارسی',
     description:
-      'بزرگترین کتابخانه برای کشف و جستجوی کانال‌های یوتیوب فارسی زبان در دسته‌بندی‌های مختلف',
+      'بزرگترین کتابخانه برای کشف و جستجوی کانال‌های یوتیوب فارسی زبان در دسته‌بندی‌های مختلف. کانال مورد علاقه خود را پیدا کنید و از محتوای فارسی یوتیوب لذت ببرید.',
   },
   twitter: {
     card: 'summary_large_image',
@@ -52,7 +55,10 @@ export const metadata: Metadata = {
       'بزرگترین کتابخانه برای کشف و جستجوی کانال‌های یوتیوب فارسی زبان در دسته‌بندی‌های مختلف',
   },
   alternates: {
-    canonical: 'https://utubefa.com',
+    canonical: 'https://youtubefarsi.com',
+  },
+  verification: {
+    google: 'google-site-verification-code',
   },
 };
 
@@ -64,8 +70,9 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className={iransans.className}>
       <head>
-        <link rel="canonical" href="https://utubefa.com" />
+        <link rel="canonical" href="https://youtubefarsi.com" />
         <meta name="google" content="notranslate" />
+        <meta name="language" content="Persian" />
       </head>
       <body suppressHydrationWarning>
         <StoreProvider>
