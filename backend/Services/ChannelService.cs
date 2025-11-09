@@ -16,10 +16,20 @@ namespace YouTubeChannelLibrary.API.Services
 
         public async Task<YouTubeChannel?> GetChannelWithRecentVideosAsync(string id)
         {
-            return await _context.Channels
+            var channel = await _context.Channels
                 .Include(c => c.Category)
-                .Include(c => c.RecentVideos.OrderByDescending(v => v.PublishedAt))
+                .Include(c => c.RecentVideos)
                 .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (channel != null && channel.RecentVideos != null)
+            {
+                channel.RecentVideos = channel.RecentVideos
+                    .OrderByDescending(v => v.PublishedAt)
+                    .Take(12)
+                    .ToList();
+            }
+
+            return channel;
         }
 
         public async Task<YouTubeChannel?> UpdateChannelAsync(string id, UpdateChannelDto dto)

@@ -36,8 +36,10 @@ const formatNumber = (num: number): string => {
   return num.toLocaleString(persianLocale);
 };
 
-const VideoCard: React.FC<{ video: YouTubeVideo; index: number }> = ({ video, index }) => {
+const VideoCard: React.FC<{ video: YouTubeVideo; index: number; channelTitle: string }> = ({ video, index, channelTitle }) => {
   const theme = useTheme();
+  const publishDate = new Date(video.publishedAt).toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -45,6 +47,7 @@ const VideoCard: React.FC<{ video: YouTubeVideo; index: number }> = ({ video, in
       transition={{ duration: 0.3, delay: index * 0.05 }}
     >
       <Card
+        component="article"
         onClick={() => window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank', 'noopener,noreferrer')}
         sx={{
           cursor: 'pointer',
@@ -62,7 +65,8 @@ const VideoCard: React.FC<{ video: YouTubeVideo; index: number }> = ({ video, in
           <Box
             component="img"
             src={optimizeImageUrl(video.thumbnailUrl)}
-            alt={video.title}
+            alt={`تصویر بند انگشتی ویدیو ${video.title} از کانال ${channelTitle}`}
+            title={video.title}
             loading="lazy"
             referrerPolicy="no-referrer"
             sx={{
@@ -83,6 +87,8 @@ const VideoCard: React.FC<{ video: YouTubeVideo; index: number }> = ({ video, in
               alignItems: 'center',
               justifyContent: 'center',
             }}
+            role="img"
+            aria-label={`تصویر پیش‌فرض برای ویدیو ${video.title}`}
           >
             <YouTube sx={{ fontSize: 48, color: 'grey.500' }} />
           </Box>
@@ -91,6 +97,7 @@ const VideoCard: React.FC<{ video: YouTubeVideo; index: number }> = ({ video, in
           <Stack spacing={1}>
             <Typography
               variant="subtitle1"
+              component="h3"
               sx={{
                 fontWeight: 600,
                 overflow: 'hidden',
@@ -102,8 +109,8 @@ const VideoCard: React.FC<{ video: YouTubeVideo; index: number }> = ({ video, in
             >
               {video.title}
             </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {new Date(video.publishedAt).toLocaleDateString('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            <Typography variant="caption" color="text.secondary" component="time" dateTime={video.publishedAt}>
+              {publishDate}
             </Typography>
           </Stack>
         </CardContent>
@@ -150,27 +157,68 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
 
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'ProfilePage',
-    mainEntity: {
-      '@type': 'Person',
-      name: channel?.title,
-      description: channel?.description,
-      image: channel?.avatar,
-      url: `https://www.youtube.com/channel/${channel?.id}`,
-      sameAs: [`https://www.youtube.com/channel/${channel?.id}`],
-      interactionStatistic: [
-        {
-          '@type': 'InteractionCounter',
-          interactionType: 'https://schema.org/SubscribeAction',
-          userInteractionCount: channel?.subscriberCount,
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'خانه',
+            item: 'https://youtubefarsi.com',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'کانال‌های یوتیوب',
+            item: 'https://youtubefarsi.com/channels',
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: channel?.title,
+            item: `https://youtubefarsi.com/channels/${channel?.id}`,
+          },
+        ],
+      },
+      {
+        '@type': 'ProfilePage',
+        mainEntity: {
+          '@type': 'Person',
+          name: channel?.title,
+          description: channel?.description,
+          image: channel?.avatar,
+          url: `https://www.youtube.com/channel/${channel?.id}`,
+          sameAs: [`https://www.youtube.com/channel/${channel?.id}`],
+          interactionStatistic: [
+            {
+              '@type': 'InteractionCounter',
+              interactionType: 'https://schema.org/SubscribeAction',
+              userInteractionCount: channel?.subscriberCount,
+            },
+            {
+              '@type': 'InteractionCounter',
+              interactionType: 'https://schema.org/WatchAction',
+              userInteractionCount: channel?.viewCount,
+            },
+          ],
         },
-        {
-          '@type': 'InteractionCounter',
-          interactionType: 'https://schema.org/WatchAction',
-          userInteractionCount: channel?.viewCount,
+      },
+      ...(videos.map((video) => ({
+        '@type': 'VideoObject',
+        name: video.title,
+        description: `ویدیو ${video.title} از کانال ${channel?.title}`,
+        thumbnailUrl: video.thumbnailUrl,
+        uploadDate: video.publishedAt,
+        contentUrl: `https://www.youtube.com/watch?v=${video.id}`,
+        embedUrl: `https://www.youtube.com/embed/${video.id}`,
+        publisher: {
+          '@type': 'Person',
+          name: channel?.title,
+          url: `https://www.youtube.com/channel/${channel?.id}`,
         },
-      ],
-    },
+      })) || []),
+    ],
   };
 
   if (isLoading) {
@@ -210,6 +258,8 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
         {/* Banner Section */}
         <Box
+          component="header"
+          role="banner"
           sx={{
             height: 300,
             background: channel.bannerImage && channel.bannerImage.trim() !== ''
@@ -228,10 +278,12 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
               background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 100%)',
             },
           }}
+          aria-label={`تصویر بنر کانال ${channel.title}`}
         >
           <Container maxWidth="lg" sx={{ height: '100%', position: 'relative', zIndex: 1 }}>
             <IconButton
               onClick={() => router.back()}
+              aria-label="بازگشت به صفحه قبل"
               sx={{
                 position: 'absolute',
                 top: 20,
@@ -254,15 +306,16 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
           >
             <Paper elevation={6} sx={{ p: { xs: 3, sm: 4, md: 5 }, borderRadius: 3 }}>
               {/* Channel Header */}
-              <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: 3, mb: 4 }}>
+              <Box component="section" aria-labelledby="channel-title" sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: 3, mb: 4 }}>
                 {channel.avatar && channel.avatar.trim() !== '' && (
                   <Avatar
                     src={optimizeImageUrl(channel.avatar)}
-                    alt={channel.title}
+                    alt={`تصویر پروفایل کانال ${channel.title}`}
                     slotProps={{
                       img: {
                         referrerPolicy: 'no-referrer',
-                        loading: 'lazy'
+                        loading: 'lazy',
+                        title: `آواتار ${channel.title}`
                       },
                     }}
                     sx={{
@@ -274,13 +327,14 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
                   />
                 )}
                 <Box sx={{ flex: 1, textAlign: { xs: 'center', sm: 'left' } }}>
-                  <Typography variant="h3" sx={{ fontWeight: 700, mb: 1 }}>
+                  <Typography id="channel-title" variant="h3" component="h1" sx={{ fontWeight: 700, mb: 1 }}>
                     {channel.title}
                   </Typography>
                   {channel.category && (
                     <Chip
                       label={channel.category.icon + ' ' + channel.category.name}
                       size="medium"
+                      aria-label={`دسته‌بندی: ${channel.category.name}`}
                       sx={{
                         color: channel.category.color,
                         backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
@@ -373,8 +427,8 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
 
               {/* Description */}
               {channel.description && (
-                <Box sx={{ mb: 4 }}>
-                  <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+                <Box component="section" aria-labelledby="about-section" sx={{ mb: 4 }}>
+                  <Typography id="about-section" variant="h5" component="h2" sx={{ fontWeight: 700, mb: 2 }}>
                     درباره کانال
                   </Typography>
                   <Typography
@@ -392,8 +446,8 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
 
               {/* Tags */}
               {tagsArray.length > 0 && (
-                <Box sx={{ mb: 4 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                <Box component="section" aria-labelledby="tags-section" sx={{ mb: 4 }}>
+                  <Typography id="tags-section" variant="h6" component="h2" sx={{ fontWeight: 600, mb: 2 }}>
                     برچسب‌ها
                   </Typography>
                   <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -412,15 +466,15 @@ export default function ChannelDetailPage({ params }: { params: Promise<{ id: st
               <Divider sx={{ my: 4 }} />
 
               {/* Videos Section */}
-              <Box>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
+              <Box component="section" aria-labelledby="videos-section">
+                <Typography id="videos-section" variant="h5" component="h2" sx={{ fontWeight: 700, mb: 3 }}>
                   آخرین ویدیوها
                 </Typography>
                 {videos.length > 0 ? (
                   <Grid container spacing={3}>
                     {videos.map((video, index) => (
                       <Grid size={{xs: 12, sm: 6, md: 4}} key={video.id}>
-                        <VideoCard video={video} index={index} />
+                        <VideoCard video={video} index={index} channelTitle={channel.title} />
                       </Grid>
                     ))}
                   </Grid>

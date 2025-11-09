@@ -23,6 +23,6 @@ public class YouTubeChannel
     public int CategoryId { get; set; }
     [ForeignKey("CategoryId")]
     public Category? Category { get; set; }
-    [NotMapped]
+
     public List<YouTubeVideo> RecentVideos { get; set; } = new List<YouTubeVideo>();
 }

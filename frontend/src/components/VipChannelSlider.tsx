@@ -137,6 +137,8 @@ const VipChannelSlider: React.FC = () => {
                           background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)',
                         },
                       }}
+                      role="img"
+                      aria-label={`تصویر بنر کانال ویژه ${channel.title}`}
                     >
                       <Chip
                         icon={<Star sx={{ color: theme.palette.warning.main, fontSize: { xs: 14, md: 18 } }} />}
@@ -185,11 +187,12 @@ const VipChannelSlider: React.FC = () => {
                       >
                         <Avatar
                           src={optimizeImageUrl(channel.avatar)}
-                          alt={channel.title}
+                          alt={`تصویر پروفایل کانال ویژه ${channel.title}`}
                           slotProps={{
                             img: {
                               referrerPolicy: 'no-referrer',
-                              loading: 'lazy'
+                              loading: 'lazy',
+                              title: `آواتار ${channel.title}`
                             },
                           }}
                           sx={{
