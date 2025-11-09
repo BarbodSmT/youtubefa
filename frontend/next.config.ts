@@ -2,6 +2,7 @@ import { webpack } from "next/dist/compiled/webpack/webpack";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   // Enable React strict mode for better error detection
   reactStrictMode: true,
 

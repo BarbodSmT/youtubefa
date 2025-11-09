@@ -63,17 +63,6 @@ public class AuthController : ControllerBase
         }
     }
 
-    [HttpGet("verify-email")]
-    public async Task<IActionResult> VerifyEmail([FromQuery] string token)
-    {
-        var success = await _authService.VerifyEmailAsync(token);
-        if (!success)
-        {
-            return BadRequest(ApiResponse<object>.Fail("لینک فعال سازی نامعتبر یا منقضی شده است."));
-        }
-        return Ok(ApiResponse<object>.Success("حساب کاربری شما با موفقیت فعال شد."));
-    }
-
     [HttpPost("forgot-password")]
     public async Task<ActionResult<ApiResponse<object>>> ForgotPassword(ForgotPasswordDto dto)
     {
