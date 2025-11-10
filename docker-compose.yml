@@ -1,0 +1,56 @@
+
+services:
+  # Backend API
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:5053:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+      - AppSettings__JwtSecret=${JWT_SECRET}
+      - YouTubeApiKey=${YOUTUBE_API_KEY}
+      - FrontendSettings__BaseUrl=${FRONTEND_URL}
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${API_URL}
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${API_URL}
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Database
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+    restart: unless-stopped
+    networks:
+      - app-network
+volumes:
+  sqldata:
+
+networks:
+  app-network:
+    driver: bridge
