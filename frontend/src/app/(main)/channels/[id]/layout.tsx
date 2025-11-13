@@ -22,6 +22,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       return {
         title: 'کانال یافت نشد | یوتیوب فارسی',
         description: 'متأسفانه کانال مورد نظر یافت نشد.',
+        alternates: {
+          canonical: `https://utubefa.com/channels/${id}`,
+        },
+        robots: {
+          index: false,
+          follow: true,
+        },
       };
     }
 
@@ -86,9 +93,17 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
   } catch (error) {
     console.error('Error generating metadata:', error);
+    const { id } = await params;
     return {
       title: 'کانال یوتیوب فارسی',
       description: 'مشاهده کانال‌های یوتیوب فارسی',
+      alternates: {
+        canonical: `https://utubefa.com/channels/${id}`,
+      },
+      robots: {
+        index: false,
+        follow: true,
+      },
     };
   }
 }
