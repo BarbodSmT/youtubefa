@@ -54,9 +54,6 @@ export const metadata: Metadata = {
     description:
       'بزرگترین کتابخانه برای کشف و جستجوی کانال‌های یوتیوب فارسی زبان در دسته‌بندی‌های مختلف',
   },
-  alternates: {
-    canonical: 'https://utubefa.com',
-  },
   verification: {
     google: 'google-site-verification-code',
   },
@@ -70,7 +67,6 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className={iransans.className}>
       <head>
-        <link rel="canonical" href="https://utubefa.com" />
         <meta name="google" content="notranslate" />
         <meta name="language" content="Persian" />
       </head>
