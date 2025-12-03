@@ -101,7 +101,7 @@ echo ""
 # ========================================
 echo "📁 Step 5: Setting up project directory..."
 
-PROJECT_DIR="/home/ubuntu/novabots/EU_Test/Logs/youtubefa"
+PROJECT_DIR="/root/youtubefa"
 mkdir -p $PROJECT_DIR
 cd $PROJECT_DIR
 
