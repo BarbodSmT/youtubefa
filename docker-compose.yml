@@ -50,7 +50,7 @@ services:
     networks:
       - app-network
 volumes:
-  sqldata:
+  db_data:
 
 networks:
   app-network:
