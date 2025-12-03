@@ -28,7 +28,13 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
       }}
       dir="rtl"
     >
-      <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 1, sm: 2 } }}>
+      <Toolbar
+        sx={{
+          justifyContent: 'space-between',
+          px: { xs: 1, sm: 2 },
+          minHeight: { xs: 56, sm: 64 },
+        }}
+      >
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -39,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
           <MenuIcon />
         </IconButton>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Logo />
+          <Logo size="small" showText />
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1, alignItems: 'center' }}>

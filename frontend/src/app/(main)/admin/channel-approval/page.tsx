@@ -203,7 +203,15 @@ export default function AdminApprovalPage() {
                 }}
               />
             </Grid>
-            <Grid size={{xs: 12, md: 6}} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+            <Grid
+              size={{xs: 12, md: 6}}
+              sx={{
+                display: 'flex',
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                gap: 1,
+                flexWrap: 'wrap',
+              }}
+            >
               <Tooltip title="بارگذاری مجدد لیست">
                 <IconButton onClick={refetch} color="primary">
                   <Refresh />
@@ -222,7 +230,7 @@ export default function AdminApprovalPage() {
               <Typography variant="body2" sx={{ mb: 2, fontWeight: 600 }}>
                 عملیات گروهی ({selectedSubmissions.length} مورد انتخاب شده):
               </Typography>
-              <Box sx={{ display: ';flex', gap: 1, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Button 
                   variant="contained" 
                   color="success" 
@@ -264,8 +272,11 @@ export default function AdminApprovalPage() {
 
       {filteredSubmissions.length > 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
-          <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
-            <Table>
+          <TableContainer
+            component={Paper}
+            sx={{ borderRadius: 3, overflowX: 'auto' }}
+          >
+            <Table sx={{ minWidth: 960 }}>
               <TableHead>
                 <TableRow sx={{ backgroundColor: theme.palette.background.paper, }}>
                   <TableCell padding="checkbox">

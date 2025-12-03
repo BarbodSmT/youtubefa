@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import { useGetVipChannelsQuery } from '@/store';
+import type { YouTubeChannel } from '@/types';
 import { optimizeImageUrl } from '@/utils/imageOptimization';
 import { useRouter } from 'next/navigation';
 import 'swiper/css';
@@ -25,13 +26,21 @@ const formatNumber = (num: number): string => {
   return num.toLocaleString(persianLocale);
 };
 
-const VipChannelSlider: React.FC = () => {
+type VipChannelSliderProps = {
+  initialVipChannels?: YouTubeChannel[];
+};
+
+const VipChannelSlider: React.FC<VipChannelSliderProps> = ({ initialVipChannels = [] }) => {
   const theme = useTheme();
   const router = useRouter();
-  const { data: vipChannels = [], isLoading } = useGetVipChannelsQuery();
+  const { data: fetchedVipChannels = [], isLoading } = useGetVipChannelsQuery(undefined, {
+    refetchOnReconnect: false,
+    refetchOnFocus: false,
+  });
+  const vipChannels = fetchedVipChannels.length ? fetchedVipChannels : initialVipChannels;
   const [swiperInstance, setSwiperInstance] = React.useState<SwiperType | null>(null);
 
-  if (isLoading) {
+  if (isLoading && vipChannels.length === 0) {
     return (
       <Box sx={{ mb: { xs: 2, md: 4 } }}>
         <Paper

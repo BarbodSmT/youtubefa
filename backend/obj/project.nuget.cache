@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "m9pFML7IhWY=",
+  "dgSpecHash": "qf9VScVxjHk=",
   "success": true,
-  "projectFilePath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+  "projectFilePath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\barbo\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\barbo\\.nuget\\packages\\azure.identity\\1.11.3\\azure.identity.1.11.3.nupkg.sha512",
@@ -169,9 +169,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "YouTubeChannelLibrary.API depends on Microsoft.EntityFrameworkCore.Design (>= 9.0.0-preview.5.24306.11) but Microsoft.EntityFrameworkCore.Design 9.0.0-preview.5.24306.11 was not found. Microsoft.EntityFrameworkCore.Design 9.0.0-preview.6.24327.4 was resolved instead.",
-      "projectPath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+      "projectPath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+      "filePath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.Design",
       "targetGraphs": [
         "net9.0"
@@ -181,9 +181,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "YouTubeChannelLibrary.API depends on Microsoft.EntityFrameworkCore.SqlServer (>= 9.0.0-preview.5.24306.11) but Microsoft.EntityFrameworkCore.SqlServer 9.0.0-preview.5.24306.11 was not found. Microsoft.EntityFrameworkCore.SqlServer 9.0.0-preview.6.24327.4 was resolved instead.",
-      "projectPath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+      "projectPath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+      "filePath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.SqlServer",
       "targetGraphs": [
         "net9.0"
@@ -193,9 +193,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "YouTubeChannelLibrary.API depends on Microsoft.EntityFrameworkCore.Tools (>= 9.0.0-preview.5.24306.11) but Microsoft.EntityFrameworkCore.Tools 9.0.0-preview.5.24306.11 was not found. Microsoft.EntityFrameworkCore.Tools 9.0.0-preview.6.24327.4 was resolved instead.",
-      "projectPath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+      "projectPath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+      "filePath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.Tools",
       "targetGraphs": [
         "net9.0"

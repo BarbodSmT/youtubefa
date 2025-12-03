@@ -224,7 +224,15 @@ export default function AdminCategoryPage() {
                 }}
               />
             </Grid>
-            <Grid size={{xs:12 , md:6}} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+            <Grid
+              size={{xs:12 , md:6}}
+              sx={{
+                display: 'flex',
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                gap: 1,
+                flexWrap: 'wrap',
+              }}
+            >
               <Tooltip title="بارگذاری مجدد لیست">
                 <IconButton onClick={refetch} color="primary">
                   <Refresh />
@@ -276,8 +284,11 @@ export default function AdminCategoryPage() {
 
       {filteredCategories.length > 0 ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
-          <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
-            <Table>
+          <TableContainer
+            component={Paper}
+            sx={{ borderRadius: 3, overflowX: 'auto' }}
+          >
+            <Table sx={{ minWidth: 720 }}>
               <TableHead>
                 <TableRow sx={{ bgcolor: theme.palette.background.paper }}>
                   <TableCell padding="checkbox">

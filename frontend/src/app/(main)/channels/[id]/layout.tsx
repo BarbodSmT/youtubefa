@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
+import { fetchChannelById } from '@/lib/serverApi';
 
 const formatSubscribers = (count: number): string => {
   if (count >= 1000000) {
@@ -11,14 +12,15 @@ const formatSubscribers = (count: number): string => {
   return count.toString();
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  try {
-    const { id } = await params;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/channels/${id}`, {
-      cache: 'no-store',
-    });
+type ChannelLayoutParams = { params: { id: string } };
 
-    if (!response.ok) {
+export async function generateMetadata({ params }: ChannelLayoutParams): Promise<Metadata> {
+  const { id } = params;
+
+  try {
+    const channel = await fetchChannelById(id);
+
+    if (!channel) {
       return {
         title: 'کانال یافت نشد | یوتیوب فارسی',
         description: 'متأسفانه کانال مورد نظر یافت نشد.',
@@ -31,9 +33,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         },
       };
     }
-
-    const result = await response.json();
-    const channel = result.data;
 
     const subscriberText = formatSubscribers(channel.subscriberCount);
     const videoCountText = channel.videoCount.toLocaleString('fa-IR');
@@ -93,7 +92,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
   } catch (error) {
     console.error('Error generating metadata:', error);
-    const { id } = await params;
     return {
       title: 'کانال یوتیوب فارسی',
       description: 'مشاهده کانال‌های یوتیوب فارسی',

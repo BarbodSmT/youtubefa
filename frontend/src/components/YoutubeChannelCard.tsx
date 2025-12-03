@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import type { YouTubeChannel } from '../types';
 import { useRouter } from 'next/navigation';
 import { optimizeImageUrl } from '@/utils/imageOptimization';
+import Image from 'next/image';
 
 interface YouTubeChannelCardProps {
   youtubeChannel: YouTubeChannel;
@@ -74,69 +75,75 @@ const YoutubeChannelCard: React.FC<YouTubeChannelCardProps> = ({ youtubeChannel,
           },
         }}
       >
-        <Box sx={{ position: 'relative' }}>
-          {youtubeChannel.bannerImage && youtubeChannel.bannerImage.trim() !== '' && (
-            <Box
-              component="img"
+        <Box sx={{ position: 'relative', height: 120, width: '100%' }}>
+          {youtubeChannel.bannerImage && youtubeChannel.bannerImage.trim() !== '' ? (
+            <Image
               src={optimizeImageUrl(youtubeChannel.bannerImage)}
-              alt={`تصویر بنر کانال ${youtubeChannel.title}`}
-              title={`بنر ${youtubeChannel.title}`}
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              sx={{
-                width: '100%',
-                height: 120,
-                objectFit: 'cover',
-                display: 'block'
-              }}
+              alt={`بنر ${youtubeChannel.title}`}
+              fill
+              sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+              style={{ objectFit: 'cover' }}
+              priority={index < 4} // Prioritize loading for above-the-fold cards
+            />
+          ) : (
+            <Box 
+              sx={{ 
+                width: '100%', 
+                height: '100%', 
+                background: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.secondary.light} 100%)` 
+              }} 
             />
           )}
-          {youtubeChannel.avatar && youtubeChannel.avatar.trim() !== '' && (
-            <Avatar
-              src={optimizeImageUrl(youtubeChannel.avatar)}
-              alt={`تصویر پروفایل کانال ${youtubeChannel.title}`}
-              slotProps={{
-                img: {
-                  referrerPolicy: 'no-referrer',
-                  loading: 'lazy',
-                  title: `آواتار ${youtubeChannel.title}`
-                },
-              }}
-              sx={{
-                width: 88,
-                height: 88,
-                position: 'absolute',
-                top: '100%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                border: `5px solid ${theme.palette.background.paper}`,
-                boxShadow: '0 6px 12px rgba(0,0,0,0.15)',
-                zIndex: 2,
-              }}
-            />
-          )}
+          
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '100%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 2,
+              borderRadius: '50%',
+              border: `5px solid ${theme.palette.background.paper}`,
+              boxShadow: '0 6px 12px rgba(0,0,0,0.15)',
+              width: 88,
+              height: 88,
+              overflow: 'hidden', 
+              backgroundColor: theme.palette.background.paper
+            }}
+          >
+             {youtubeChannel.avatar && youtubeChannel.avatar.trim() !== '' ? (
+                <Image
+                  src={optimizeImageUrl(youtubeChannel.avatar)}
+                  alt={`آواتار ${youtubeChannel.title}`}
+                  width={88}
+                  height={88}
+                  style={{ objectFit: 'cover' }}
+                />
+             ) : (
+                <Avatar sx={{ width: '100%', height: '100%' }} />
+             )}
+          </Box>
         </Box>
+
         <CardContent sx={{ flexGrow: 1, pt: 7, textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h6" component="h2" sx={{ fontWeight: 700, mb: 1, color: 'text.primary' }}>
+          <Typography variant="h6" component="h2" sx={{ fontWeight: 700, mb: 1, color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {youtubeChannel.title}
           </Typography>
 
-          {youtubeChannel.category?.name && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1, mb: 2 }}>
-              {youtubeChannel.category && (
+          <Box sx={{ minHeight: 32, mb: 2 }}> {/* Reserve space for chip to prevent shift */}
+            {youtubeChannel.category?.name && (
                 <Chip
                   label={youtubeChannel.category.icon + ' ' + youtubeChannel.category.name}
                   size="small"
-                  sx={{ mt: 1, color: youtubeChannel.category.color, backgroundColor: theme.palette.background.default }}
+                  sx={{ color: youtubeChannel.category.color, backgroundColor: theme.palette.background.default }}
                 />
-              )}
-            </Box>
-          )}
+            )}
+          </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'space-evenly', my: 2, width: '100%' }}>
             <Box sx={{ textAlign: 'center' }}>
-              <PeopleAlt sx={{ color: 'text.secondary', mb: 0.5 }} />
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              <PeopleAlt sx={{ color: 'text.secondary', mb: 0.5, fontSize: 20 }} />
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
                 {formatNumber(youtubeChannel.subscriberCount)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -144,8 +151,8 @@ const YoutubeChannelCard: React.FC<YouTubeChannelCardProps> = ({ youtubeChannel,
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
-              <Videocam sx={{ color: 'text.secondary', mb: 0.5 }} />
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              <Videocam sx={{ color: 'text.secondary', mb: 0.5, fontSize: 20 }} />
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
                 {formatNumber(youtubeChannel.videoCount)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -153,8 +160,8 @@ const YoutubeChannelCard: React.FC<YouTubeChannelCardProps> = ({ youtubeChannel,
               </Typography>
             </Box>
             <Box sx={{ textAlign: 'center' }}>
-              <Visibility sx={{ color: 'text.secondary', mb: 0.5 }} />
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              <Visibility sx={{ color: 'text.secondary', mb: 0.5, fontSize: 20 }} />
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
                 {formatNumber(youtubeChannel.viewCount)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
@@ -165,28 +172,26 @@ const YoutubeChannelCard: React.FC<YouTubeChannelCardProps> = ({ youtubeChannel,
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {youtubeChannel.tags && (
-            <>
-              <Divider sx={{ my: 2 }} />
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 1, px: 1 }}>
-                <TagIcon sx={{ color: 'text.secondary', fontSize: '1.125rem' }} />
-                {youtubeChannel.tags?.slice(0, 3).map((tag, tagIndex) => (
-                  <Chip
-                    key={tagIndex}
-                    label={`#${tag}`}
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      borderColor: 'divider',
-                      color: 'text.secondary',
-                      borderRadius: '8px',
-                      backgroundColor: theme.palette.background.default,
-                    }}
-                  />
-                ))}
-              </Box>
-            </>
-          )}
+          <Divider sx={{ my: 2 }} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 0.5, px: 1, minHeight: 24 }}>
+            <TagIcon sx={{ color: 'text.secondary', fontSize: '1rem' }} />
+            {youtubeChannel.tags?.slice(0, 3).map((tag, tagIndex) => (
+              <Chip
+                key={tagIndex}
+                label={`#${tag}`}
+                size="small"
+                variant="outlined"
+                sx={{
+                  borderColor: 'divider',
+                  color: 'text.secondary',
+                  borderRadius: '8px',
+                  backgroundColor: theme.palette.background.default,
+                  fontSize: '0.7rem',
+                  height: 24
+                }}
+              />
+            ))}
+          </Box>
 
           <Tooltip title="باز کردن کانال یوتیوب" arrow>
             <IconButton

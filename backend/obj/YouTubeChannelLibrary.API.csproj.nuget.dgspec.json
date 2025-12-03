@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj": {}
+    "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj": {}
   },
   "projects": {
-    "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj": {
+    "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+        "projectUniqueName": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
         "projectName": "YouTubeChannelLibrary.API",
-        "projectPath": "D:\\youtubefa\\backend\\YouTubeChannelLibrary.API.csproj",
+        "projectPath": "D:\\youtubefa\\youtubefa-1\\backend\\YouTubeChannelLibrary.API.csproj",
         "packagesPath": "C:\\Users\\barbo\\.nuget\\packages\\",
-        "outputPath": "D:\\youtubefa\\backend\\obj\\",
+        "outputPath": "D:\\youtubefa\\youtubefa-1\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\barbo\\AppData\\Roaming\\NuGet\\NuGet.Config"
